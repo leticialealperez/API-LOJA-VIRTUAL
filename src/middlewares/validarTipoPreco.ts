@@ -8,7 +8,7 @@ export function validarTipoPreco(
 	const { preco } = req.body;
 
 	if (typeof preco === 'string') {
-		req.body.preco = Number(preco.replaceAll('.', '').replaceAll(',', '.')); //1500.00
+		req.body.preco = Number(preco.replace(',', '.')); //1500.00
 	}
 
 	if (isNaN(req.body.preco)) {
