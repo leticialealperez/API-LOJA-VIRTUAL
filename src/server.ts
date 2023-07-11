@@ -1,3 +1,4 @@
+import cors from 'cors';
 import 'dotenv/config';
 import express from 'express';
 import { ClientesController, ProdutosController } from './controllers';
@@ -19,6 +20,8 @@ app.use(express.json());
 // converte os codigos unicode enviados na rota para o respectivo caracter
 // Ex: %20 => ' '
 app.use(express.urlencoded({ extended: false }));
+
+app.use(cors()); // TODAS AS ORIGENS DE REQUISIÇÕES SERÃO ACEITAS E ATENDIDAS
 
 //
 app.listen(process.env.PORTA, () => {
