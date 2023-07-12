@@ -7,7 +7,11 @@ export function validarParametrosFiltragemProdutos(
 ) {
 	const filtros = req.query;
 
-	if (filtros.ordem_nome !== 'cresc' && filtros.ordem_nome !== 'decresc') {
+	if (
+		filtros.ordem_nome &&
+		filtros.ordem_nome !== 'cresc' &&
+		filtros.ordem_nome !== 'decresc'
+	) {
 		return res.status(400).json({
 			sucesso: false,
 			mensagem:
@@ -15,7 +19,11 @@ export function validarParametrosFiltragemProdutos(
 		});
 	}
 
-	if (filtros.ordem_preco !== 'cresc' && filtros.ordem_preco !== 'decresc') {
+	if (
+		filtros.ordem_preco &&
+		filtros.ordem_preco !== 'cresc' &&
+		filtros.ordem_preco !== 'decresc'
+	) {
 		return res.status(400).json({
 			sucesso: false,
 			mensagem:
@@ -23,27 +31,33 @@ export function validarParametrosFiltragemProdutos(
 		});
 	}
 
-	const valorMinParse = Number(filtros.valor_min);
-	const valorMaxParse = Number(filtros.valor_max);
+	if (filtros.valor_min) {
+		const valorMinParse = Number(filtros.valor_min);
 
-	if (isNaN(valorMinParse)) {
-		return res.status(400).json({
-			sucesso: false,
-			mensagem:
-				'Os valor do filtro de valor_min não é um dado numérico válido.',
-		});
+		if (isNaN(valorMinParse)) {
+			return res.status(400).json({
+				sucesso: false,
+				mensagem:
+					'Os valor do filtro de valor_min não é um dado numérico válido.',
+			});
+		}
+
+		req.query.valor_min = valorMinParse.toString(); // "1000.50"
 	}
 
-	if (isNaN(valorMaxParse)) {
-		return res.status(400).json({
-			sucesso: false,
-			mensagem:
-				'O valor do filtro de valor_max não é um dado numérico válido.',
-		});
-	}
+	if (filtros.valor_max) {
+		const valorMaxParse = Number(filtros.valor_max);
 
-	req.query.valor_min = valorMinParse.toString(); // "1000.50"
-	req.query.valor_max = valorMaxParse.toString();
+		if (isNaN(valorMaxParse)) {
+			return res.status(400).json({
+				sucesso: false,
+				mensagem:
+					'O valor do filtro de valor_max não é um dado numérico válido.',
+			});
+		}
+
+		req.query.valor_max = valorMaxParse.toString();
+	}
 
 	next();
 }
